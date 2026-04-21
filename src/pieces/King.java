@@ -2,19 +2,108 @@ package pieces;
 
 import mechanics.Board;
 import mechanics.Coordinate;
-import pieces.MoveUtils;
 
 public class King extends Piece{
-    boolean hasMoved = false; //used to check for castle validity
+    private boolean hasMoved = false; //used to check for castle validity
 
     public King(Board board, Coordinate position, boolean isWhite) {
         super(board, "K", position, isWhite, 8, PieceType.KING);
     }
 
     @Override
+    public void move(Coordinate newCoordinate){
+        //castling
+        if(!hasMoved && newCoordinate.file() == 3){
+            Rook rook = (Rook) board.getPiece(new Coordinate(1, position.rank()));
+            rook.hasMoved();
+            rook.move(new Coordinate(4, position.rank()));
+        }
+        if(!hasMoved && newCoordinate.file() == 7){
+            Rook rook = (Rook) board.getPiece(new Coordinate(8, position.rank()));
+            rook.hasMoved();
+            rook.move(new Coordinate(6, position.rank()));
+        }
+
+        hasMoved = true;
+        super.move(newCoordinate);
+    }
+
+    @Override
     public Coordinate[] getPossibleMoves() {
-        //TODO
-        return new Coordinate[0];
+        Coordinate[] moves = new Coordinate[8];
+        int moveIndex = 0;
+
+        Piece targetPiece;
+        Coordinate checkCoordinate;
+
+        //normal moves
+        for(int i : new int[]{-1,0,1}){
+            for(int j : new int[]{-1,0,1}){
+                if(i == 0 && j == 0){
+                    continue;
+                }
+                checkCoordinate = new Coordinate(position.file()+i, position.rank()+j);
+                if(!Coordinate.isValid(checkCoordinate)){
+                    continue;
+                }
+
+                targetPiece = board.getPiece(checkCoordinate);
+
+                if(targetPiece == null || targetPiece.isWhite != isWhite){
+                    moves[moveIndex] = checkCoordinate;
+                    moveIndex++;
+                }
+            }
+        }
+
+        //castling
+        if(!hasMoved){
+            for(int rookFile : new int[]{1,8}) {
+                targetPiece = board.getPiece(new Coordinate(rookFile, position.rank()));
+
+                //is rook valid
+                if (targetPiece != null && targetPiece.isWhite == isWhite && targetPiece.pieceType == PieceType.ROOK) {
+                    if (!((Rook) targetPiece).hasMoved()) {
+                        boolean pathOpen = false;
+
+                        //is path unattacked
+                        if(rookFile == 1){
+                            if (testSpace(new Coordinate(4, position.rank()))){
+                                pathOpen = true;
+                            }
+                            checkCoordinate = new Coordinate(3, position.rank());
+                        }
+                        else{
+                            if(testSpace(new Coordinate(6, position.rank()))){
+                                pathOpen = true;
+                            }
+                            checkCoordinate = new Coordinate(7, position.rank());
+                        }
+
+                        if(pathOpen){
+                            moves[moveIndex] = checkCoordinate;
+                            moveIndex++;
+                        }
+                    }
+                }
+            }
+        }
+
+        filterKingExposed(moves);
+
+        return moves;
+    }
+
+    //checks if a space could be entered by running filterKingExposed on one given tile
+    private boolean testSpace(Coordinate target){
+        if(board.getPiece(target) != null){
+            return false;
+        }
+
+        Coordinate[] targetAsArray = new Coordinate[1];
+        targetAsArray[0] = target;
+        filterKingExposed(targetAsArray);
+        return targetAsArray[0] != null;
     }
 
     //check diagonals + straights + knight squares + pawn squares for attackers
@@ -52,6 +141,9 @@ public class King extends Piece{
                 continue;
             }
             Piece foundPiece = board.getPiece(coord);
+            if(foundPiece == null){
+                continue;
+            }
 
             if(foundPiece.isWhite != isWhite && (foundPiece.pieceType == PieceType.BISHOP
                                             || foundPiece.pieceType == PieceType.QUEEN)) {
@@ -64,7 +156,6 @@ public class King extends Piece{
             if(coord == null){
                 continue;
             }
-
             Piece foundPiece = board.getPiece(coord);
             if(foundPiece == null){
                 continue;
@@ -80,16 +171,18 @@ public class King extends Piece{
     }
 
     private boolean isAttackedBy(Piece attackingPawn, PieceType attacker){
-        if(attackingPawn == null){
-            return false;
-        }
-        if(attackingPawn.pieceType == attacker && attackingPawn.isWhite != isWhite){
-            return true;
-        }
-        return false;
+        return attackingPawn != null && attackingPawn.pieceType == attacker && attackingPawn.isWhite != isWhite;
     }
-
     private boolean isAttackedBy(Coordinate attackingPawn, PieceType attacker){
         return isAttackedBy(board.getPiece(attackingPawn), attacker);
+    }
+
+
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved() {
+        this.hasMoved = true;
     }
 }

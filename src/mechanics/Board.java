@@ -19,9 +19,30 @@ public class Board {
                 oldPiece = oldBoard[rank][file];
 
                 if(oldPiece != null){
-                    //warning, copied pieces are completely new, not retaining important data e.g. if pawn has moved
+                    //warning, copied pieces are completely new
                     board[rank][file] = GameLogic.createPieceFromType(this,
                             oldPiece.pieceType, oldPiece.getPosition(), oldPiece.isWhite);
+
+                    //consider new pieces moved if old pieces moved
+                    //if added hasMoved to parent Piece, could do without expensive assignment
+                    if(oldPiece.pieceType == PieceType.KING){
+                        King oldKing = (King) oldPiece;
+                        if(oldKing.hasMoved()){
+                            ((King) board[rank][file]).setHasMoved();
+                        }
+                    }
+                    else if(oldPiece.pieceType == PieceType.PAWN){
+                        Pawn oldPawn = (Pawn) oldPiece;
+                        if(oldPawn.hasMoved()){
+                            ((Pawn) board[rank][file]).setHasMoved();
+                        }
+                    }
+                    else if(oldPiece.pieceType == PieceType.ROOK){
+                        Rook oldRook = (Rook) oldPiece;
+                        if(oldRook.hasMoved()){
+                            ((Rook) board[rank][file]).setHasMoved();
+                        }
+                    }
                 }
             }
         }
@@ -31,6 +52,7 @@ public class Board {
         board[coordinate.rank()-1][coordinate.file()-1] = piece;
     }
 
+    //should only be exposed to Piece class
     public void movePiece(Piece piece, Coordinate newCoordinate){
         setPiece(piece.getPosition(), null);
         setPiece(newCoordinate, piece);
@@ -58,7 +80,7 @@ public class Board {
         Piece piece;
         for(int rank = 0; rank < GameSettings.RANK_LENGTH; rank++){
             for(int file = 0; file < GameSettings.FILE_LENGTH; file++){
-                piece = getPiece(new Coordinate(file, rank));
+                piece = board[rank][file];
                 if(piece != null && piece.isWhite == isWhite && piece.pieceType == PieceType.KING){
                     return (King) piece;
                 }

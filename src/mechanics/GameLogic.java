@@ -43,6 +43,10 @@ public final class GameLogic {
                 break;
             }
 
+            case KNIGHT -> {
+                newPiece = new Knight(board, coordinate, isWhite);
+            }
+
             case DUMMY -> {
                 newPiece = new DummyPiece(board, coordinate, isWhite);
                 break;

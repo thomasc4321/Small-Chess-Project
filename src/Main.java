@@ -1,4 +1,3 @@
-import jdk.jshell.execution.Util;
 import mechanics.Board;
 import mechanics.BoardFactory;
 import mechanics.Coordinate;
@@ -7,16 +6,25 @@ import ui.UtilsUI;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = BoardFactory.createTestBoard();
+        Board board = BoardFactory.createClassicBoard();
 
         System.out.println();
         System.out.println(board.toString());
         System.out.println();
 
-        Queen queen1 = (Queen) board.getPiece(new Coordinate(5,2));
+        King testKing = (King) board.getPiece(new Coordinate(5,8));
 
-        UtilsUI.displayPossibleMoves(queen1);
+        //UtilsUI.printPossibleMoves(testKing);
+        UtilsUI.displayPossibleMoves(testKing);
         System.out.println();
-        
+
+        testKing.move(new Coordinate(3, 8));
+
+        UtilsUI.displayPossibleMoves(testKing);
+
+
+        //Knight testKnight = (Knight) board.getPiece(new Coordinate(2,1));
+        //UtilsUI.printPossibleMoves(testKnight);
+        //UtilsUI.displayPossibleMoves(testKnight);
     }
 }

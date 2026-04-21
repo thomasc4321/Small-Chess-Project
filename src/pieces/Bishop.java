@@ -10,6 +10,8 @@ public class Bishop extends Piece{
 
     @Override
     public Coordinate[] getPossibleMoves() {
-        return MoveUtils.checkDiagonalsLong(this);
+        Coordinate[] moves = MoveUtils.checkDiagonalsLong(this);
+        filterKingExposed(moves);
+        return moves;
     }
 }

@@ -2,7 +2,7 @@ package pieces;
 import mechanics.*;
 
 public class Pawn extends Piece{
-    boolean hasMoved = false;//remove? more accurate to game and less feeding variables needlessly to new pawn -wt
+    private boolean hasMoved = false;//remove? more accurate to game and less feeding variables needlessly to new pawn -wt
 
     public Pawn(Board board, Coordinate position, boolean isWhite){
         super(board, "P", position, isWhite, 4, PieceType.PAWN);
@@ -54,14 +54,22 @@ public class Pawn extends Piece{
             }
         }
 
+        filterKingExposed(moves);
+
         return moves;
     }
 
     @Override
     public void move(Coordinate newCoordinate){
-        //should this check if move is valid or just trust user?
         hasMoved = true;
-
         super.move(newCoordinate);
+    }
+
+    public boolean hasMoved(){
+        return hasMoved;
+    }
+
+    public void setHasMoved() {
+        hasMoved = true;
     }
 }
