@@ -2,7 +2,7 @@ package pieces;
 import mechanics.*;
 
 public class Pawn extends Piece{
-    boolean hasMoved = false;
+    boolean hasMoved = false;//remove? more accurate to game and less feeding variables needlessly to new pawn -wt
 
     public Pawn(Board board, Coordinate position, boolean isWhite){
         super(board, "P", position, isWhite, 4, PieceType.PAWN);

@@ -6,7 +6,7 @@ public abstract class Piece {
     public final String representation;
     protected Coordinate position;
     protected final Board board;
-    protected final int MAX_MOVES;
+    protected final int MAX_MOVES;//theoretical max number of valid moves on one turn, used for optimisation
     public final PieceType pieceType;
 
     public Piece(Board board, String representation, Coordinate position, boolean isWhite, int maxMoves, PieceType pieceType){
@@ -44,5 +44,25 @@ public abstract class Piece {
     @Override
     public String toString(){
         return representation;
+    }
+
+    protected void filterKingExposed(Coordinate[] validMoves){
+        Board simulation;
+        King simulationKing;
+        for(int i = 0; i < validMoves.length; i++){
+            if(validMoves[i] == null){
+                continue;
+            }
+
+            simulation = new Board();
+            simulation.setBoard(board.getBoardState());
+            simulation.movePiece(simulation.getPiece(getPosition()), validMoves[i]);
+
+            simulationKing = simulation.getKing(isWhite);
+
+            if(simulationKing.inCheck()){
+                validMoves[i] = null;
+            }
+        }
     }
 }

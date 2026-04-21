@@ -25,6 +25,8 @@ public class Queen extends Piece{
             }
         }
 
+        filterKingExposed(moves);
+
         return moves;
     }
 }

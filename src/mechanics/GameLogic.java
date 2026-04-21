@@ -23,8 +23,23 @@ public final class GameLogic {
                 break;
             }
 
+            case KING -> {
+                newPiece = new King(board, coordinate, isWhite);
+                break;
+            }
+
             case QUEEN -> {
                 newPiece = new Queen(board, coordinate, isWhite);
+                break;
+            }
+
+            case ROOK -> {
+                newPiece = new Rook(board, coordinate, isWhite);
+                break;
+            }
+
+            case BISHOP -> {
+                newPiece = new Bishop(board, coordinate, isWhite);
                 break;
             }
 

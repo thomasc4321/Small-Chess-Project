@@ -6,18 +6,17 @@ public class Board {
     private Piece[][] board = new Piece[8][8];
 
     public Board(){
-
     }
 
     /**
      * completely resets state of the board 2D array. Warning: new pieces are created
-     * @param copyOfBoard
+     * @param oldBoard
      */
-    public void setBoard(Piece[][] copyOfBoard){
+    public void setBoard(Piece[][] oldBoard){
         Piece oldPiece;
         for(int rank = 0; rank < GameSettings.RANK_LENGTH; rank++){
             for(int file = 0; file < GameSettings.FILE_LENGTH; file++){
-                oldPiece = copyOfBoard[rank][file];
+                oldPiece = oldBoard[rank][file];
 
                 if(oldPiece != null){
                     //warning, copied pieces are completely new, not retaining important data e.g. if pawn has moved
@@ -38,6 +37,9 @@ public class Board {
     }
 
     public Piece getPiece(Coordinate coordinate){
+        if(!Coordinate.isValid(coordinate)){
+            return null;
+        }
         return board[coordinate.rank()-1][coordinate.file()-1];
     }
 
@@ -50,6 +52,20 @@ public class Board {
 
     public Piece[][] getBoardState(){
         return board;
+    }
+
+    public King getKing(boolean isWhite){
+        Piece piece;
+        for(int rank = 0; rank < GameSettings.RANK_LENGTH; rank++){
+            for(int file = 0; file < GameSettings.FILE_LENGTH; file++){
+                piece = getPiece(new Coordinate(file, rank));
+                if(piece != null && piece.isWhite == isWhite && piece.pieceType == PieceType.KING){
+                    return (King) piece;
+                }
+            }
+        }
+
+        throw new RuntimeException("ERROR: No king found. King isWhite: " + isWhite);
     }
 
     @Override
