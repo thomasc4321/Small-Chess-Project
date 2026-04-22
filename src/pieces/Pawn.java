@@ -2,6 +2,7 @@ package pieces;
 import mechanics.*;
 
 public class Pawn extends Piece{
+    //TODO: Promotion and En Passant
     private boolean hasMoved = false;//remove? more accurate to game and less feeding variables needlessly to new pawn -wt
 
     public Pawn(Board board, Coordinate position, boolean isWhite){
@@ -14,11 +15,11 @@ public class Pawn extends Piece{
         int moveIndex = 0;
         int movementDirection = isWhite ? 1 : -1;
 
-        //is pawn somehow at the final rank on a new turn
+        /*//is pawn somehow at the final rank on a new turn
         if(position.rank() >= GameSettings.FILE_LENGTH*movementDirection){
             System.out.println("PIECE ERROR: Pawn at back rank and trying to move");
             return moves;
-        }
+        }*/
 
         //check if can move to next tile
         Coordinate nextTile = new Coordinate(position.file(), position.rank()+movementDirection);

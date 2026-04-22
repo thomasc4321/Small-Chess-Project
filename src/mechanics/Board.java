@@ -117,9 +117,15 @@ public class Board {
         }
         output.append("  ");
 
-        int aValue = Character.getNumericValue('A');
+        //alphabet for files
+        /*int aValue = Character.getNumericValue('A');
         for(int i = 0; i < board.length; i++){
             output.append((char) (65 + i));
+            output.append("   ");
+        }*/
+        //numbers for files
+        for(int i = 1; i <= board.length; i++){
+            output.append(i);
             output.append("   ");
         }
 

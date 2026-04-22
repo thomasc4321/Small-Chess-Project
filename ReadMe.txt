@@ -1,7 +1,8 @@
 
 TODO:
-- En passant
-
+- En passant + promotion
+- Player UI
+- AI Player
 
 
 

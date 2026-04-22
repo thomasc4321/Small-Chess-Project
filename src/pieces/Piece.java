@@ -56,7 +56,7 @@ public abstract class Piece {
 
             simulation = new Board();
             simulation.setBoard(board.getBoardState());
-            simulation.movePiece(simulation.getPiece(getPosition()), validMoves[i]);
+            simulation.getPiece(getPosition()).move(validMoves[i]);
 
             simulationKing = simulation.getKing(isWhite);
 

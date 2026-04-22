@@ -22,18 +22,18 @@ public final class BoardFactory {
 
         GameLogic.createPieceFromType(board, PieceType.ROOK,
                 new Coordinate(1,backRank), isWhite);
-        /*GameLogic.createPieceFromType(board, PieceType.KNIGHT,
+        GameLogic.createPieceFromType(board, PieceType.KNIGHT,
                 new Coordinate(2,backRank), isWhite);
         GameLogic.createPieceFromType(board, PieceType.BISHOP,
                 new Coordinate(3,backRank), isWhite);
         GameLogic.createPieceFromType(board, PieceType.QUEEN,
-                new Coordinate(4,backRank), isWhite);*/
+                new Coordinate(4,backRank), isWhite);
         GameLogic.createPieceFromType(board, PieceType.KING,
                 new Coordinate(5,backRank), isWhite);
-        /*GameLogic.createPieceFromType(board, PieceType.BISHOP,
+        GameLogic.createPieceFromType(board, PieceType.BISHOP,
                 new Coordinate(6,backRank), isWhite);
         GameLogic.createPieceFromType(board, PieceType.KNIGHT,
-                new Coordinate(7,backRank), isWhite);*/
+                new Coordinate(7,backRank), isWhite);
         GameLogic.createPieceFromType(board, PieceType.ROOK,
                 new Coordinate(8,backRank), isWhite);
     }
